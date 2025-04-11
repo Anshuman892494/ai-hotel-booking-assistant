@@ -15,14 +15,6 @@ An intelligent chatbot that helps users find the best hotel deals worldwide, com
 
 
 
-<p align="center">
-
-  <img src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExcXJqY3V6bGJ1b3VtZ3VqY3R4eWJxZ2NtY3J4dWJ5dG5xYzV6aCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/3o7TKsQ8XqkK2k6zI4/giphy.gif" alt="AI Hotel Booking Assistant Demo" width="600">
-
-</p>
-
-
-
 ## ✨ Features
 
 
