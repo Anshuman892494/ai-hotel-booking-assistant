@@ -1,0 +1,610 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Hotel Booking Assistant</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #4A90E2; /* Sky blue */
+            --secondary: #10bedd; /* Teal */
+            --accent: #F5A623; /* Orange */
+            --bg: #1A1A1A;
+            --gradient-start: rgba(74, 144, 226, 0.9);
+            --gradient-end: rgba(15, 216, 173, 0.9);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, var(--bg) 0%, #0a0d10 100%);
+            color: white;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end)),
+                        url('https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fitcrop&w=1350&q=80') no-repeat center center/cover;
+            opacity: 0.15;
+            z-index: -1;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 70%;
+            padding: 2rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 2rem;
+            animation: slideDown 0.5s ease;
+            background: rgba(15, 76, 129, 0.5);
+            padding: 1rem;
+            border-radius: 15px;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+            background: linear-gradient(45deg, var(--primary), var(--secondary), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .header .credit {
+            font-size: 1rem;
+            color: rgba(250, 246, 246, 0.8);
+            margin-bottom: 0.5rem;
+        }
+
+        .chat-container {
+            background: rgba(31, 177, 214, 0.15); /* Light blue */
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 1.5rem;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+        }
+
+        .chat-messages {
+            height: 60vh;
+            overflow-y: auto;
+            padding: 1rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .message {
+            max-width: 80%;
+            padding: 1.2rem;
+            border-radius: 15px;
+            animation: popIn 0.3s ease;
+            background: rgba(255, 255, 255, 0.2);
+            align-self: flex-start;
+        }
+
+        .options-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .option-btn {
+            padding: 0.8rem 1.5rem;
+            background: linear-gradient(45deg, var(--primary), var(--secondary));
+            border: none;
+            border-radius: 10px;
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .option-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .input-container {
+            margin-top: 2rem;
+            display: flex;
+            gap: 1rem;
+        }
+
+        input {
+            flex: 1;
+            padding: 1rem;
+            border: none;
+            border-radius: 15px;
+            background: rgba(255, 255, 255, 0.15);
+            color: white;
+            font-size: 1rem;
+        }
+
+        input:focus {
+            outline: 2px solid var(--secondary);
+            background: rgba(255, 255, 255, 0.25);
+        }
+
+        .typing-indicator {
+            display: none;
+            padding: 1rem;
+            color: var(--accent);
+        }
+
+        .hotel-card {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .hotel-name {
+            font-weight: bold;
+            font-size: 1.1rem;
+            margin-bottom: 0.5rem;
+            color: var(--secondary);
+        }
+
+        .hotel-rating {
+            color: var(--accent);
+            margin-bottom: 0.5rem;
+        }
+
+        .hotel-price {
+            font-size: 1.2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .price-drop {
+            color: #50b2e3;
+            font-weight: bold;
+        }
+
+        @keyframes popIn {
+            from { transform: scale(0.9); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+
+        @keyframes slideDown {
+            from { transform: translateY(-20px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        @media (max-width: 768px) {
+            .container { padding: 1rem; }
+            .chat-messages { height: 50vh; }
+            .message { max-width: 90%; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>AI Hotel Booking Assistant</h1><br>
+            <div class="credit"><b>Project by <br><br>Anshuman Varma </b><br>Registration No.: 12414950</div><br>
+            <p>Find the best hotel deals, compare prices, and book your perfect stay!</p>
+        </div>
+
+        <div class="chat-container">
+            <div class="chat-messages" id="chat-messages"></div>
+            <div class="typing-indicator" id="typing">
+                <i class="fas fa-circle-notch fa-spin"></i> Searching for hotel deals...
+            </div>
+            <div class="input-container">
+                <input type="text" id="user-input" placeholder="Ask about hotels (e.g., 'Hotels in Paris for 2 nights')...">
+                <button class="option-btn" onclick="sendMessage()">
+                    <i class="fas fa-paper-plane"></i> Send
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const chatMessages = document.getElementById('chat-messages');
+        const typingIndicator = document.getElementById('typing');
+        const userInput = document.getElementById('user-input');
+
+        // Mock hotel data (replace with real API in production)
+        const hotelData = {
+            popular_destinations: [
+                { 
+                    name: "Grand Hyatt New York", 
+                    location: "New York, NY", 
+                    price: 250, 
+                    prevPrice: 280, 
+                    rating: 4.8,
+                    amenities: ["Free WiFi", "Pool", "Spa", "Restaurant"],
+                    image: "https://images.unsplash.com/photo-1564501049412-61c2a3083791"
+                },
+                { 
+                    name: "The Ritz London", 
+                    location: "London, UK", 
+                    price: 350, 
+                    prevPrice: 400, 
+                    rating: 4.9,
+                    amenities: ["Free WiFi", "Spa", "Fine Dining", "Concierge"],
+                    image: "https://images.unsplash.com/photo-1520250497591-112f2f40a3f4"
+                },
+                { 
+                    name: "Shangri-La Paris", 
+                    location: "Paris, France", 
+                    price: 300, 
+                    prevPrice: 320, 
+                    rating: 4.7,
+                    amenities: ["Eiffel Tower View", "Spa", "Bar", "Room Service"],
+                    image: "https://images.unsplash.com/photo-1520250497591-112f2f40a3f4"
+                }
+            ],
+            budget_options: [
+                { 
+                    name: "Comfort Inn Downtown", 
+                    location: "Chicago, IL", 
+                    price: 90, 
+                    prevPrice: 100, 
+                    rating: 3.9,
+                    amenities: ["Free WiFi", "Breakfast", "Gym"],
+                    image: "https://images.unsplash.com/photo-1566073771259-6a8506099945"
+                },
+                { 
+                    name: "Ibis Budget", 
+                    location: "Berlin, Germany", 
+                    price: 60, 
+                    prevPrice: 70, 
+                    rating: 3.7,
+                    amenities: ["Free WiFi", "24-hour Front Desk"],
+                    image: "https://images.unsplash.com/photo-1566073771259-6a8506099945"
+                }
+            ],
+            luxury_resorts: [
+                { 
+                    name: "Four Seasons Bora Bora", 
+                    location: "Bora Bora, French Polynesia", 
+                    price: 1200, 
+                    prevPrice: 1500, 
+                    rating: 5.0,
+                    amenities: ["Overwater Bungalow", "Private Beach", "Spa", "Fine Dining"],
+                    image: "https://images.unsplash.com/photo-1551882547-ff40c63fe5fa"
+                },
+                { 
+                    name: "Burj Al Arab", 
+                    location: "Dubai, UAE", 
+                    price: 1500, 
+                    prevPrice: 1800, 
+                    rating: 5.0,
+                    amenities: ["Private Butler", "Helipad", "Luxury Suites", "Beach Access"],
+                    image: "https://images.unsplash.com/photo-1518684079-3c830dcef090"
+                }
+            ]
+        };
+
+        let currentCategory = null;
+        let currentOffset = 0;
+        let trackedHotels = []; // To store hotels user wants to track
+        let userPreferences = {
+            location: null,
+            checkIn: null,
+            checkOut: null,
+            guests: 2
+        };
+
+        function createMessage(content, options = []) {
+            const messageDiv = document.createElement('div');
+            messageDiv.classList.add('message');
+            messageDiv.innerHTML = content;
+
+            if (options.length > 0) {
+                const optionsContainer = document.createElement('div');
+                optionsContainer.classList.add('options-container');
+                options.forEach(opt => {
+                    const btn = document.createElement('button');
+                    btn.classList.add('option-btn');
+                    btn.innerHTML = `${opt.icon} ${opt.text}`;
+                    btn.onclick = () => handleOptionClick(opt.action);
+                    optionsContainer.appendChild(btn);
+                });
+                messageDiv.appendChild(optionsContainer);
+            }
+
+            chatMessages.appendChild(messageDiv);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+        function showTyping() {
+            typingIndicator.style.display = 'block';
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+        function hideTyping() {
+            typingIndicator.style.display = 'none';
+        }
+
+        function displayMainMenu() {
+            currentCategory = null;
+            currentOffset = 0;
+            createMessage(`🏨 Welcome to your AI Hotel Booking Assistant! What would you like to do?`, [
+                { text: 'Popular Hotels', icon: '<i class="fas fa-hotel"></i>', action: 'popular_destinations' },
+                { text: 'Budget Options', icon: '<i class="fas fa-wallet"></i>', action: 'budget_options' },
+                { text: 'Luxury Resorts', icon: '<i class="fas fa-crown"></i>', action: 'luxury_resorts' },
+                { text: 'Search Hotels', icon: '<i class="fas fa-search"></i>', action: 'search_hotels' },
+                { text: 'Track a Hotel', icon: '<i class="fas fa-bell"></i>', action: 'track_hotel' },
+                { text: 'View Tracked Hotels', icon: '<i class="fas fa-list"></i>', action: 'view_tracked' }
+            ]);
+        }
+
+        function displayCategoryOptions(category) {
+            currentCategory = category;
+            currentOffset = 0;
+            showCategoryOptions();
+        }
+
+        function showCategoryOptions() {
+            const items = hotelData[currentCategory];
+            const options = items.slice(currentOffset, currentOffset + 3).map(item => ({
+                text: `${item.name} ($${item.price})`,
+                icon: '<i class="fas fa-bed"></i>',
+                action: `hotel_${item.name.replace(/\s/g, '_')}`
+            }));
+
+            if (currentOffset + 3 < items.length) {
+                options.push({ text: 'More Options', icon: '<i class="fas fa-arrow-down"></i>', action: 'show_more' });
+            }
+            options.push({ text: 'Back to Main', icon: '<i class="fas fa-home"></i>', action: 'main' });
+
+            createMessage(` ${currentCategory.replace('_', ' ').split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')} - Choose a hotel:`, options);
+        }
+
+        function displayHotelDetails(hotelName) {
+            const category = Object.keys(hotelData).find(cat => 
+                hotelData[cat].some(hotel => hotel.name.replace(/\s/g, '_') === hotelName.replace('hotel_', ''))
+            );
+            
+            const hotel = hotelData[category].find(h => h.name.replace(/\s/g, '_') === hotelName.replace('hotel_', ''));
+            
+            const amenitiesList = hotel.amenities.map(a => `<li>${a}</li>`).join('');
+            const priceDrop = hotel.prevPrice > hotel.price ? 
+                `<span class="price-drop">Price dropped from $${hotel.prevPrice}!</span>` : 
+                'No price drop yet.';
+            
+            const hotelCard = `
+                <div class="hotel-card">
+                    <div class="hotel-name">${hotel.name}</div>
+                    <div class="hotel-rating">${'★'.repeat(Math.floor(hotel.rating))}${'☆'.repeat(5-Math.floor(hotel.rating))} (${hotel.rating})</div>
+                    <div class="hotel-location"><i class="fas fa-map-marker-alt"></i> ${hotel.location}</div>
+                    <div class="hotel-price">$${hotel.price} per night</div>
+                    <div>${priceDrop}</div>
+                    <div><strong>Amenities:</strong></div>
+                    <ul>${amenitiesList}</ul>
+                </div>
+            `;
+            
+            createMessage(hotelCard, [
+                { text: 'Track Price', icon: '<i class="fas fa-bell"></i>', action: `track_${hotel.name.replace(/\s/g, '_')}` },
+                { text: 'Book Now', icon: '<i class="fas fa-calendar-check"></i>', action: `book_${hotel.name.replace(/\s/g, '_')}` },
+                { text: `More ${category.replace('_', ' ')}`, icon: '<i class="fas fa-hotel"></i>', action: category },
+                { text: 'Main Menu', icon: '<i class="fas fa-home"></i>', action: 'main' }
+            ]);
+        }
+
+        // Mock API fetch function (replace with real API like Booking.com or Expedia API)
+        async function fetchHotelPrice(location, checkIn, checkOut, guests) {
+            return new Promise(resolve => {
+                setTimeout(() => {
+                    // Search all categories for matching location
+                    const allHotels = Object.values(hotelData).flat();
+                    const matchingHotels = allHotels.filter(h => 
+                        h.location.toLowerCase().includes(location.toLowerCase()));
+                    
+                    if (matchingHotels.length > 0) {
+                        resolve(matchingHotels);
+                    } else {
+                        // Mock some results if no match found
+                        resolve([
+                            { 
+                                name: `Sample Hotel in ${location}`, 
+                                location: location, 
+                                price: Math.floor(Math.random() * 300) + 50, 
+                                prevPrice: null, 
+                                rating: 4.0 + Math.random(),
+                                amenities: ["Free WiFi", "Breakfast", "Gym"]
+                            },
+                            { 
+                                name: `Luxury ${location} Resort`, 
+                                location: location, 
+                                price: Math.floor(Math.random() * 500) + 200, 
+                                prevPrice: null, 
+                                rating: 4.5 + Math.random(),
+                                amenities: ["Pool", "Spa", "Restaurant", "Room Service"]
+                            }
+                        ]);
+                    }
+                }, 1500);
+            });
+        }
+
+        function handleOptionClick(action) {
+            showTyping();
+            setTimeout(async () => {
+                hideTyping();
+                if (action === 'main') {
+                    displayMainMenu();
+                } else if (Object.keys(hotelData).includes(action)) {
+                    displayCategoryOptions(action);
+                } else if (action === 'show_more') {
+                    currentOffset += 3;
+                    showCategoryOptions();
+                } else if (action === 'search_hotels') {
+                    createMessage(`🔍 Let's find your perfect hotel. Where would you like to stay?`, [
+                        { text: 'Back', icon: '<i class="fas fa-arrow-left"></i>', action: 'main' }
+                    ]);
+                    userPreferences = {
+                        location: null,
+                        checkIn: null,
+                        checkOut: null,
+                        guests: 2
+                    };
+                } else if (action === 'track_hotel') {
+                    createMessage(`🔔 Enter the hotel name and location you'd like to track (e.g., "Grand Hyatt New York"):`, [
+                        { text: 'Back', icon: '<i class="fas fa-arrow-left"></i>', action: 'main' }
+                    ]);
+                } else if (action === 'view_tracked') {
+                    if (trackedHotels.length === 0) {
+                        createMessage(`📋 You aren't tracking any hotels yet!`, [
+                            { text: 'Track a Hotel', icon: '<i class="fas fa-bell"></i>', action: 'track_hotel' },
+                            { text: 'Main Menu', icon: '<i class="fas fa-home"></i>', action: 'main' }
+                        ]);
+                    } else {
+                        const trackedList = trackedHotels.map(h => 
+                            `<div class="hotel-card" style="margin-bottom: 10px;">
+                                <div class="hotel-name">${h.name}</div>
+                                <div class="hotel-location">${h.location}</div>
+                                <div class="hotel-price">$${h.price} per night</div>
+                            </div>`
+                        ).join('');
+                        createMessage(`📋 Your tracked hotels:<br>${trackedList}`, [
+                            { text: 'Track Another', icon: '<i class="fas fa-bell"></i>', action: 'track_hotel' },
+                            { text: 'Main Menu', icon: '<i class="fas fa-home"></i>', action: 'main' }
+                        ]);
+                    }
+                } else if (action.startsWith('hotel_')) {
+                    displayHotelDetails(action);
+                } else if (action.startsWith('track_')) {
+                    const hotelName = action.replace('track_', '').replace(/_/g, ' ');
+                    // Search all categories for this hotel
+                    const allHotels = Object.values(hotelData).flat();
+                    const hotelToTrack = allHotels.find(h => h.name.replace(/\s/g, '_') === hotelName);
+                    
+                    if (!hotelToTrack) {
+                        createMessage(`⚠️ Couldn't find details for that hotel.`, [
+                            { text: 'Try Again', icon: '<i class="fas fa-redo"></i>', action: 'track_hotel' },
+                            { text: 'Main Menu', icon: '<i class="fas fa-home"></i>', action: 'main' }
+                        ]);
+                        return;
+                    }
+                    
+                    if (!trackedHotels.some(h => h.name === hotelToTrack.name)) {
+                        trackedHotels.push(hotelToTrack);
+                        createMessage(`🔔 Now tracking ${hotelToTrack.name} in ${hotelToTrack.location}! We'll alert you if the price drops.`, [
+                            { text: 'View Tracked', icon: '<i class="fas fa-list"></i>', action: 'view_tracked' },
+                            { text: 'Main Menu', icon: '<i class="fas fa-home"></i>', action: 'main' }
+                        ]);
+                    } else {
+                        createMessage(`🔔 You're already tracking ${hotelToTrack.name}!`, [
+                            { text: 'View Tracked', icon: '<i class="fas fa-list"></i>', action: 'view_tracked' },
+                            { text: 'Main Menu', icon: '<i class="fas fa-home"></i>', action: 'main' }
+                        ]);
+                    }
+                } else if (action.startsWith('book_')) {
+                    const hotelName = action.replace('book_', '').replace(/_/g, ' ');
+                    createMessage(`📅 Ready to book ${hotelName}! (Note: This is a demo. In a real app, this would redirect to booking.)`, [
+                        { text: 'Search More', icon: '<i class="fas fa-search"></i>', action: 'search_hotels' },
+                        { text: 'Main Menu', icon: '<i class="fas fa-home"></i>', action: 'main' }
+                    ]);
+                }
+            }, 1000);
+        }
+
+        async function sendMessage() {
+            const query = userInput.value.trim();
+            if (!query) return;
+
+            showTyping();
+            setTimeout(async () => {
+                hideTyping();
+                
+                // Check if this is part of a multi-step search
+                if (!userPreferences.location) {
+                    userPreferences.location = query;
+                    createMessage(`📅 When will you be staying in ${query}? (e.g., "Next weekend" or "July 15-20")`, [
+                        { text: 'Back', icon: '<i class="fas fa-arrow-left"></i>', action: 'main' }
+                    ]);
+                } else if (!userPreferences.checkIn) {
+                    // Simple date parsing (in real app use a proper date parser)
+                    const dates = query.match(/(\d{1,2}\/\d{1,2}\/\d{4})|(\d{1,2}-\d{1,2})|(next weekend)/gi);
+                    if (dates) {
+                        userPreferences.checkIn = "2023-07-15"; // Mock dates
+                        userPreferences.checkOut = "2023-07-20";
+                        createMessage(`👨‍👩‍👧‍👦 How many guests? (Currently set to ${userPreferences.guests})`, [
+                            { text: '2 Guests', icon: '<i class="fas fa-user"></i>', action: 'set_guests_2' },
+                            { text: '4 Guests', icon: '<i class="fas fa-users"></i>', action: 'set_guests_4' },
+                            { text: 'Back', icon: '<i class="fas fa-arrow-left"></i>', action: 'search_hotels' }
+                        ]);
+                    } else {
+                        createMessage(`⚠️ Please enter dates in format like "July 15-20" or "next weekend"`, [
+                            { text: 'Back', icon: '<i class="fas fa-arrow-left"></i>', action: 'search_hotels' }
+                        ]);
+                    }
+                } else if (query.startsWith('track')) {
+                    // Handle tracking request from free text
+                    const hotelName = query.replace(/^track\s+/i, '');
+                    const allHotels = Object.values(hotelData).flat();
+                    const matchingHotels = allHotels.filter(h => 
+                        h.name.toLowerCase().includes(hotelName.toLowerCase()) || 
+                        h.location.toLowerCase().includes(hotelName.toLowerCase()));
+                    
+                    if (matchingHotels.length > 0) {
+                        const options = matchingHotels.map(hotel => ({
+                            text: `${hotel.name} (${hotel.location})`,
+                            icon: '<i class="fas fa-hotel"></i>',
+                            action: `track_${hotel.name.replace(/\s/g, '_')}`
+                        }));
+                        options.push({ text: 'Back', icon: '<i class="fas fa-arrow-left"></i>', action: 'main' });
+                        
+                        createMessage(`🔔 Which hotel would you like to track?`, options);
+                    } else {
+                        createMessage(`⚠️ Couldn't find "${hotelName}". Try being more specific with name and location.`, [
+                            { text: 'Try Again', icon: '<i class="fas fa-redo"></i>', action: 'track_hotel' },
+                            { text: 'Main Menu', icon: '<i class="fas fa-home"></i>', action: 'main' }
+                        ]);
+                    }
+                } else {
+                    // Assume it's a general search
+                    const hotels = await fetchHotelPrice(query, null, null, 2);
+                    const hotelsList = hotels.map(hotel => `
+                        <div class="hotel-card">
+                            <div class="hotel-name">${hotel.name}</div>
+                            <div class="hotel-location"><i class="fas fa-map-marker-alt"></i> ${hotel.location}</div>
+                            <div class="hotel-price">$${hotel.price} per night</div>
+                            <div class="hotel-rating">${'★'.repeat(Math.floor(hotel.rating))}${'☆'.repeat(5-Math.floor(hotel.rating))} (${hotel.rating.toFixed(1)})</div>
+                        </div>
+                    `).join('');
+                    
+                    createMessage(`🏩 Found ${hotels.length} hotels matching "${query}":<br>${hotelsList}`, [
+                        { text: 'Refine Search', icon: '<i class="fas fa-search"></i>', action: 'search_hotels' },
+                        { text: 'Main Menu', icon: '<i class="fas fa-home"></i>', action: 'main' }
+                    ]);
+                }
+                
+                userInput.value = '';
+            }, 1500);
+        }
+
+        userInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') sendMessage();
+        });
+
+        // Initialize with main menu
+        displayMainMenu();
+    </script>
+</body>
+</html>
