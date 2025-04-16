@@ -1,15 +1,108 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AI Hotel Booking Assistant - Find Best Hotel Deals Worldwide</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
+        /* Add to :root */
+        [data-theme="dark"] body::before {
+            opacity: 0.08;
+        }
+
+        [data-theme="dark"] .amenity {
+            background: rgba(59, 130, 246, 1);
+        }
+
         :root {
-            --primary: #2563eb; /* Blue */
-            --secondary: #1e40af; /* Darker Blue */
-            --accent: #3b82f6; /* Lighter Blue */
+            --primary: #2563eb;
+            --secondary: #1e40af;
+            --accent: #3b82f6;
+            --bg: #f8fafc;
+            --text: #1e293b;
+            --card-bg: rgba(255, 255, 255, 0.9);
+            --input-bg: white;
+            --shadow-color: rgba(0, 0, 0, 0.1);
+            --border-color: #e2e8f0;
+            --gradient-start: rgba(37, 99, 235, 0.1);
+            --gradient-end: rgba(30, 64, 175, 0.1);
+        }
+
+        /* Dark mode variables */
+        [data-theme="dark"] {
+            --primary: #3b82f6;
+            --secondary: #60a5fa;
+            --accent: #93c5fd;
+            --bg: #0f172a;
+            --text: #f8fafc;
+            --card-bg: rgba(15, 23, 42, 0.9);
+            --input-bg: #1e293b;
+            --shadow-color: rgba(0, 0, 0, 0.3);
+            --border-color: #334155;
+            --gradient-start: rgba(59, 130, 246, 0.1);
+            --gradient-end: rgba(147, 197, 253, 0.1);
+        }
+
+        /* Add these new styles */
+        .theme-toggle {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            z-index: 10;
+        }
+
+        /* Update existing styles that use hardcoded colors */
+        body {
+            background: var(--bg);
+            color: var(--text);
+        }
+
+        .header,
+        .chat-container {
+            background: var(--card-bg);
+            box-shadow: 0 4px 6px var(--shadow-color);
+        }
+
+        .message {
+            background: var(--card-bg);
+        }
+
+        input {
+            background: var(--input-bg);
+            border-color: var(--border-color);
+            color: var(--text);
+        }
+
+        .hotel-card {
+            background: var(--card-bg);
+            box-shadow: 0 2px 4px var(--shadow-color);
+        }
+
+        .saved-hotels {
+            background: var(--card-bg);
+            color: var(--primary);
+            border-color: var(--accent);
+        }
+
+        :root {
+            --primary: #2563eb;
+            /* Blue */
+            --secondary: #1e40af;
+            /* Darker Blue */
+            --accent: #3b82f6;
+            /* Lighter Blue */
             --bg: #f8fafc;
             --gradient-start: rgba(37, 99, 235, 0.1);
             --gradient-end: rgba(30, 64, 175, 0.1);
@@ -41,7 +134,7 @@
             width: 100%;
             height: 100%;
             background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end)),
-                        url('https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1350&q=80') no-repeat center center/cover;
+                url('https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1350&q=80') no-repeat center center/cover;
             opacity: 0.15;
             z-index: -1;
         }
@@ -241,19 +334,42 @@
         }
 
         @keyframes popIn {
-            from { transform: scale(0.9); opacity: 0; }
-            to { transform: scale(1); opacity: 1; }
+            from {
+                transform: scale(0.9);
+                opacity: 0;
+            }
+
+            to {
+                transform: scale(1);
+                opacity: 1;
+            }
         }
 
         @keyframes slideDown {
-            from { transform: translateY(-20px); opacity: 0; }
-            to { transform: translateY(0); opacity: 1; }
+            from {
+                transform: translateY(-20px);
+                opacity: 0;
+            }
+
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
         }
 
         @media (max-width: 768px) {
-            .container { padding: 1rem; }
-            .chat-messages { height: 50vh; }
-            .message { max-width: 90%; }
+            .container {
+                padding: 1rem;
+            }
+
+            .chat-messages {
+                height: 50vh;
+            }
+
+            .message {
+                max-width: 90%;
+            }
+
             .saved-hotels {
                 position: static;
                 margin: 0.5rem auto;
@@ -262,10 +378,14 @@
         }
     </style>
 </head>
+
 <body>
     <div class="saved-hotels" onclick="handleOptionClick('view_saved')">
         <i class="fas fa-heart"></i> Saved Hotels
     </div>
+    <button id="themeToggle" class="theme-toggle">
+        <i class="fas fa-moon"></i> Dark Mode
+    </button>
 
     <div class="container">
         <div class="header">
@@ -301,13 +421,56 @@
         // Sample hotel data for when API is not available
         const sampleHotelData = {
             popular_destinations: [
-                { name: "The Ritz London", location: "London, UK", price: 450, currency: "GBP", rating: 4.8, amenities: ["Luxury Spa", "5-Star Dining", "Historic"], image: "https://images.unsplash.com/photo-1566073771259-6a8506099945" },
-                { name: "The Plaza Hotel", location: "New York, USA", price: 550, currency: "USD", rating: 4.7, amenities: ["Central Park View", "Iconic", "Luxury"], image: "https://images.unsplash.com/photo-1564501049412-61c2a3083791" },
-                { name: "Burj Al Arab", location: "Dubai, UAE", price: 1200, currency: "USD", rating: 4.9, amenities: ["Private Beach", "Luxury", "7-Star"], image: "https://images.unsplash.com/photo-1530521954074-e64f6810b32d" }
+                // Luxury hotels
+                { name: "Taj Mahal Palace", location: "Mumbai, Maharashtra", price: 25000, currency: "INR", rating: 4.9, amenities: ["Luxury", "Sea View", "Heritage", "Spa", "Fine Dining"], image: "https://images.unsplash.com/photo-1583417319070-4a69db38a482" },
+                { name: "The Oberoi Amarvilas", location: "Agra, Uttar Pradesh", price: 45000, currency: "INR", rating: 4.9, amenities: ["Taj Mahal View", "Luxury", "Private Pool", "Butler Service"], image: "https://images.unsplash.com/photo-1566438480900-0609be27a4be" },
+                { name: "Taj Falaknuma Palace", location: "Hyderabad, Telangana", price: 38000, currency: "INR", rating: 4.8, amenities: ["Palace Hotel", "Luxury", "Historic", "Horse Carriage Rides"], image: "https://images.unsplash.com/photo-1582719471386-5d6891411a1a" },
+                { name: "The Leela Palace", location: "Bengaluru, Karnataka", price: 22000, currency: "INR", rating: 4.7, amenities: ["Luxury", "Spa", "Infinity Pool", "Gardens"], image: "https://images.unsplash.com/photo-1566073771259-6a8506099945" },
+                { name: "Rambagh Palace", location: "Jaipur, Rajasthan", price: 32000, currency: "INR", rating: 4.8, amenities: ["Former Royal Residence", "Luxury", "Spa", "Fine Dining"], image: "https://images.unsplash.com/photo-1584132967334-10e028bd69f7" },
+
+                // Business hotels
+                { name: "ITC Grand Chola", location: "Chennai, Tamil Nadu", price: 15000, currency: "INR", rating: 4.7, amenities: ["Business Center", "Spa", "Multiple Restaurants", "Pool"], image: "https://images.unsplash.com/photo-1566073771259-6a8506099945" },
+                { name: "The Lalit New Delhi", location: "New Delhi", price: 12000, currency: "INR", rating: 4.5, amenities: ["Central Location", "Conference Rooms", "Spa", "Roof Top Pool"], image: "https://images.unsplash.com/photo-1566438480900-0609be27a4be" },
+                { name: "Hyatt Regency", location: "Pune, Maharashtra", price: 10000, currency: "INR", rating: 4.4, amenities: ["Business Facilities", "Fitness Center", "Multiple Dining Options"], image: "https://images.unsplash.com/photo-1582719471386-5d6891411a1a" },
+
+                // Heritage properties
+                { name: "Taj Lake Palace", location: "Udaipur, Rajasthan", price: 35000, currency: "INR", rating: 4.9, amenities: ["Lake View", "Luxury", "Boat Transfer", "Royal Experience"], image: "https://images.unsplash.com/photo-1566073771259-6a8506099945" },
+                { name: "The Gateway Hotel", location: "Mahabalipuram, Tamil Nadu", price: 8000, currency: "INR", rating: 4.3, amenities: ["Beach Access", "Heritage", "Pool", "Spa"], image: "https://images.unsplash.com/photo-1584132967334-10e028bd69f7" },
+                { name: "Wildflower Hall", location: "Shimla, Himachal Pradesh", price: 28000, currency: "INR", rating: 4.7, amenities: ["Mountain View", "Luxury", "Spa", "Adventure Activities"], image: "https://images.unsplash.com/photo-1583417319070-4a69db38a482" }
             ],
             budget_options: [
-                { name: "Ibis Budget", location: "Paris, France", price: 80, currency: "EUR", rating: 3.7, amenities: ["Budget", "Central", "Clean"], image: "https://images.unsplash.com/photo-1520250497591-112f2f40a3f4" },
-                { name: "Travelodge", location: "London, UK", price: 65, currency: "GBP", rating: 3.5, amenities: ["Affordable", "Basic", "City Center"], image: "https://images.unsplash.com/photo-1566073771259-6a8506099945" }
+                // Budget chains
+                { name: "Treebo Trend", location: "Mumbai, Maharashtra", price: 2500, currency: "INR", rating: 3.9, amenities: ["Budget", "Clean Rooms", "Free WiFi", "Breakfast"], image: "https://images.unsplash.com/photo-1520250497591-112f2f40a3f4" },
+                { name: "OYO Townhouse", location: "Bengaluru, Karnataka", price: 1800, currency: "INR", rating: 3.7, amenities: ["Budget", "Smart Rooms", "Café", "Free WiFi"], image: "https://images.unsplash.com/photo-1566073771259-6a8506099945" },
+                { name: "FabHotel", location: "Delhi", price: 2200, currency: "INR", rating: 3.8, amenities: ["Budget", "Complimentary Breakfast", "Free WiFi"], image: "https://images.unsplash.com/photo-1582719471386-5d6891411a1a" },
+
+                // State-specific budget options
+                { name: "Hotel Supreme", location: "Jaipur, Rajasthan", price: 1500, currency: "INR", rating: 3.5, amenities: ["Budget", "City Center", "Basic Amenities"], image: "https://images.unsplash.com/photo-1584132967334-10e028bd69f7" },
+                { name: "Hotel Sapphire", location: "Goa", price: 2000, currency: "INR", rating: 3.6, amenities: ["Budget", "Near Beach", "AC Rooms"], image: "https://images.unsplash.com/photo-1566438480900-0609be27a4be" },
+                { name: "Hotel Hill View", location: "Darjeeling, West Bengal", price: 1800, currency: "INR", rating: 3.4, amenities: ["Budget", "Mountain View", "Basic Amenities"], image: "https://images.unsplash.com/photo-1583417319070-4a69db38a482" },
+                { name: "Hotel Ganges View", location: "Varanasi, Uttar Pradesh", price: 1200, currency: "INR", rating: 3.2, amenities: ["Budget", "Ghat View", "Basic Amenities"], image: "https://images.unsplash.com/photo-1566073771259-6a8506099945" },
+                { name: "Hotel Kerala House", location: "Kochi, Kerala", price: 1500, currency: "INR", rating: 3.5, amenities: ["Budget", "Traditional Decor", "Homely Food"], image: "https://images.unsplash.com/photo-1582719471386-5d6891411a1a" },
+
+                // Mid-range options
+                { name: "Lemon Tree Premier", location: "Chennai, Tamil Nadu", price: 4500, currency: "INR", rating: 4.1, amenities: ["Comfortable", "Pool", "Restaurant", "Fitness Center"], image: "https://images.unsplash.com/photo-1584132967334-10e028bd69f7" },
+                { name: "Radisson Blu", location: "Guwahati, Assam", price: 5000, currency: "INR", rating: 4.2, amenities: ["Comfortable", "River View", "Restaurant", "Bar"], image: "https://images.unsplash.com/photo-1566438480900-0609be27a4be" },
+                { name: "Fortune Park", location: "Bhopal, Madhya Pradesh", price: 4000, currency: "INR", rating: 4.0, amenities: ["Business Hotel", "Conference Facilities", "Restaurant"], image: "https://images.unsplash.com/photo-1583417319070-4a69db38a482" }
+            ],
+            // Adding more categories
+            beach_resorts: [
+                { name: "Taj Exotica Resort & Spa", location: "Goa", price: 18000, currency: "INR", rating: 4.7, amenities: ["Beachfront", "Luxury", "Spa", "Water Sports"], image: "https://images.unsplash.com/photo-1566073771259-6a8506099945" },
+                { name: "The Leela Kovalam", location: "Kovalam, Kerala", price: 15000, currency: "INR", rating: 4.6, amenities: ["Cliff-top Location", "Ayurveda Spa", "Private Beach"], image: "https://images.unsplash.com/photo-1582719471386-5d6891411a1a" },
+                { name: "Taj Fisherman's Cove", location: "Chennai, Tamil Nadu", price: 12000, currency: "INR", rating: 4.5, amenities: ["Beach Resort", "Spa", "Water Sports"], image: "https://images.unsplash.com/photo-1584132967334-10e028bd69f7" }
+            ],
+            hill_stations: [
+                { name: "Wildflower Hall", location: "Shimla, Himachal Pradesh", price: 28000, currency: "INR", rating: 4.7, amenities: ["Mountain View", "Luxury", "Spa", "Adventure Activities"], image: "https://images.unsplash.com/photo-1583417319070-4a69db38a482" },
+                { name: "Windamere Hotel", location: "Darjeeling, West Bengal", price: 8000, currency: "INR", rating: 4.3, amenities: ["Heritage", "Mountain View", "Old World Charm"], image: "https://images.unsplash.com/photo-1566073771259-6a8506099945" },
+                { name: "The Tamara Coorg", location: "Coorg, Karnataka", price: 22000, currency: "INR", rating: 4.6, amenities: ["Luxury", "Coffee Plantation", "Spa", "Nature Walks"], image: "https://images.unsplash.com/photo-1582719471386-5d6891411a1a" }
+            ],
+            heritage_properties: [
+                { name: "Taj Umaid Bhawan Palace", location: "Jodhpur, Rajasthan", price: 40000, currency: "INR", rating: 4.9, amenities: ["Royal Palace", "Luxury", "Museum", "Spa"], image: "https://images.unsplash.com/photo-1584132967334-10e028bd69f7" },
+                { name: "The Paul Bangalore", location: "Bengaluru, Karnataka", price: 10000, currency: "INR", rating: 4.4, amenities: ["Art Hotel", "Luxury", "Spa", "Fine Dining"], image: "https://images.unsplash.com/photo-1566438480900-0609be27a4be" },
+                { name: "Ahilya Fort", location: "Maheshwar, Madhya Pradesh", price: 15000, currency: "INR", rating: 4.5, amenities: ["Fort Hotel", "Narmada River View", "Cultural Experience"], image: "https://images.unsplash.com/photo-1583417319070-4a69db38a482" }
             ]
         };
 
@@ -331,14 +494,14 @@
                     },
                     body: `grant_type=client_credentials&client_id=${API_KEY}&client_secret=${API_SECRET}`
                 });
-                
+
                 const data = await response.json();
                 accessToken = data.access_token;
                 console.log("Amadeus API connected successfully");
             } catch (error) {
                 console.error("Error connecting to Amadeus API. Using sample data.", error);
             }
-            
+
             displayMainMenu();
         }
 
@@ -389,51 +552,60 @@
 
         async function searchHotels(location, checkIn = null, checkOut = null) {
             showTyping();
-            
+
             try {
                 let hotels = [];
-                
+
                 if (accessToken) {
                     // Use Amadeus API if available
                     let url = `https://test.api.amadeus.com/v2/shopping/hotel-offers?cityCode=${location}`;
-                    
+
                     if (checkIn && checkOut) {
                         url += `&checkInDate=${checkIn}&checkOutDate=${checkOut}`;
                     }
-                    
+
                     const response = await fetch(url, {
                         headers: {
                             'Authorization': `Bearer ${accessToken}`
                         }
                     });
-                    
+
                     const data = await response.json();
-                    
+
                     if (data.data && data.data.length > 0) {
                         hotels = data.data.map(hotel => ({
                             name: hotel.hotel.name,
                             location: `${hotel.hotel.address.cityName}, ${hotel.hotel.address.countryCode}`,
                             price: hotel.offers[0].price.total,
                             currency: hotel.offers[0].price.currency,
-                            rating: (Math.random() * 2 + 3).toFixed(1), // Mock rating as API doesn't always provide
+                            rating: (Math.random() * 2 + 3).toFixed(1),
                             amenities: hotel.hotel.amenities || ["Free WiFi", "24h Reception"]
                         }));
                     }
                 }
-                
+
                 // Fallback to sample data if API fails or returns no results
                 if (hotels.length === 0) {
-                    hotels = sampleHotelData.popular_destinations.concat(sampleHotelData.budget_options);
+                    // Combine all hotel categories
+                    hotels = [
+                        ...sampleHotelData.popular_destinations,
+                        ...sampleHotelData.budget_options,
+                        ...sampleHotelData.beach_resorts,
+                        ...sampleHotelData.hill_stations,
+                        ...sampleHotelData.heritage_properties
+                    ];
+
                     // Filter by location if possible
                     if (location) {
-                        hotels = hotels.filter(h => 
+                        hotels = hotels.filter(h =>
                             h.location.toLowerCase().includes(location.toLowerCase())
                         );
                     }
                 }
-                
+
+                // Rest of the function remains the same...
                 hideTyping();
-                
+
                 if (hotels.length === 0) {
                     createMessage(`🔍 No hotels found in ${location}. Try another destination.`, false, [
                         { text: 'Try Another Search', icon: '<i class="fas fa-search"></i>', action: 'search_hotels' },
@@ -441,24 +613,24 @@
                     ]);
                     return;
                 }
-                
+
                 // Display hotel results
                 const hotelsList = hotels.slice(0, 5).map(hotel => `
-                    <div class="hotel-card">
-                        <h3>${hotel.name}</h3>
-                        <p>📍 ${hotel.location}</p>
-                        <p class="price">${hotel.currency} ${hotel.price}</p>
-                        <p class="rating">⭐ ${hotel.rating}/5.0</p>
-                        <p>${hotel.amenities.map(a => `<span class="amenity">${a}</span>`).join(' ')}</p>
-                    </div>
-                `).join('');
-                
+            <div class="hotel-card">
+                <h3>${hotel.name}</h3>
+                <p>📍 ${hotel.location}</p>
+                <p class="price">${hotel.currency} ${hotel.price}</p>
+                <p class="rating">⭐ ${hotel.rating}/5.0</p>
+                <p>${hotel.amenities.map(a => `<span class="amenity">${a}</span>`).join(' ')}</p>
+            </div>
+        `).join('');
+
                 createMessage(`🏨 Hotels in ${location}:<br>${hotelsList}`, false, [
                     { text: 'View More', icon: '<i class="fas fa-arrow-down"></i>', action: 'view_more', data: { location, hotels } },
                     { text: 'Search Again', icon: '<i class="fas fa-search"></i>', action: 'search_hotels' },
                     { text: 'Main Menu', icon: '<i class="fas fa-home"></i>', action: 'main' }
                 ]);
-                
+
             } catch (error) {
                 console.error("Error searching hotels:", error);
                 hideTyping();
@@ -478,7 +650,7 @@
                     <p>${hotel.amenities.map(a => `<span class="amenity">${a}</span>`).join(' ')}</p>
                 </div>
             `).join('');
-            
+
             createMessage(hotelsList, false, [
                 { text: 'Search Hotels', icon: '<i class="fas fa-search"></i>', action: 'search_hotels' },
                 { text: 'Main Menu', icon: '<i class="fas fa-home"></i>', action: 'main' }
@@ -487,53 +659,64 @@
 
         function handleOptionClick(action, data = null) {
             showTyping();
-            
+
             setTimeout(async () => {
                 hideTyping();
-                
-                switch(action) {
+
+                switch (action) {
                     case 'main':
                         displayMainMenu();
                         break;
-                        
+
                     case 'search_hotels':
                         createMessage(`🌍 Enter a city to search for hotels (e.g., "Paris" or "New York"):`, false, [
                             { text: 'Back', icon: '<i class="fas fa-arrow-left"></i>', action: 'main' }
                         ]);
                         break;
-                        
+
                     case 'popular_destinations':
                         searchHotels('LON'); // London
                         break;
-                        
+
                     case 'budget_options':
                         searchHotels('PAR'); // Paris
                         break;
-                        
+
                     case 'luxury_hotels':
                         searchHotels('DXB'); // Dubai
                         break;
-                        
+                    case 'beach_resorts':
+                        searchHotels('Goa'); // Default beach destination
+                        break;
+
+                    case 'hill_stations':
+                        searchHotels('Shimla'); // Default hill station
+                        break;
+
+                    case 'heritage_properties':
+                        searchHotels('Jaipur'); // Default heritage city
+                        break;
+
                     case 'view_saved':
                         if (savedHotels.length === 0) {
                             createMessage(`❤ You haven't saved any hotels yet!`, false, [
                                 { text: 'Browse Hotels', icon: '<i class="fas fa-hotel"></i>', action: 'main' }
                             ]);
                         } else {
-                            const savedList = savedHotels.map(h => 
+                            const savedList = savedHotels.map(h =>
                                 `<div class="hotel-card">
                                     <h3>${h.name}</h3>
                                     <p>📍 ${h.location}</p>
                                     <p class="price">${h.currency} ${h.price}</p>
                                 </div>`
                             ).join('');
-                            
+
                             createMessage(`❤ Your saved hotels:<br>${savedList}`, false, [
                                 { text: 'Browse More', icon: '<i class="fas fa-hotel"></i>', action: 'main' }
                             ]);
                         }
                         break;
-                        
+
                     case 'set_preferences':
                         createMessage(`⚙️ Set your travel preferences:`, false, [
                             { text: 'Set Budget', icon: '<i class="fas fa-wallet"></i>', action: 'set_budget' },
@@ -541,7 +724,7 @@
                             { text: 'Main Menu', icon: '<i class="fas fa-home"></i>', action: 'main' }
                         ]);
                         break;
-                        
+
                     case 'set_budget':
                         createMessage(`💰 What's your budget per night?`, false, [
                             { text: 'Economy (< $100)', action: 'save_budget', data: 'economy' },
@@ -550,7 +733,7 @@
                             { text: 'Back', icon: '<i class="fas fa-arrow-left"></i>', action: 'set_preferences' }
                         ]);
                         break;
-                        
+
                     case 'save_budget':
                         userPreferences.budget = data;
                         createMessage(`✅ Budget preference saved as ${data}.`, false, [
@@ -558,13 +741,13 @@
                             { text: 'Main Menu', icon: '<i class="fas fa-home"></i>', action: 'main' }
                         ]);
                         break;
-                        
+
                     case 'set_dates':
                         createMessage(`📅 When are you traveling? Enter dates (e.g., "June 15-20, 2023" or "15/06/2023-20/06/2023"):`, false, [
                             { text: 'Back', icon: '<i class="fas fa-arrow-left"></i>', action: 'set_preferences' }
                         ]);
                         break;
-                        
+
                     case 'view_more':
                         if (data && data.hotels) {
                             const moreHotels = data.hotels.slice(5, 10).map(hotel => `
@@ -575,20 +758,21 @@
                                     <p class="rating">⭐ ${hotel.rating}/5.0</p>
                                 </div>
                             `).join('');
-                            
+
                             createMessage(`🏨 More hotels in ${data.location}:<br>${moreHotels}`, false, [
                                 { text: 'Search Again', icon: '<i class="fas fa-search"></i>', action: 'search_hotels' },
                                 { text: 'Main Menu', icon: '<i class="fas fa-home"></i>', action: 'main' }
                             ]);
                         }
                         break;
-                        
+
+
                     default:
                         if (action.startsWith('save_')) {
                             const hotelName = action.replace('save_', '').replace(/_/g, ' ');
                             const hotel = [...sampleHotelData.popular_destinations, ...sampleHotelData.budget_options]
                                 .find(h => h.name.toLowerCase() === hotelName.toLowerCase());
-                            
+
                             if (hotel && !savedHotels.some(h => h.name === hotel.name)) {
                                 savedHotels.push(hotel);
                                 document.querySelector('.saved-hotels').innerHTML = `<i class="fas fa-heart"></i> Saved Hotels (${savedHotels.length})`;
@@ -610,24 +794,24 @@
             createMessage(question, true);
             userInput.value = '';
             showTyping();
-            
+
             setTimeout(async () => {
                 hideTyping();
-                
+
                 // Check for location queries
                 if (question.toLowerCase().includes('hotel') || question.toLowerCase().includes('stay')) {
                     const locationMatch = question.match(/(?:in|at|near)\s+([a-zA-Z\s]+)/i);
                     const dateMatch = question.match(/(\d{1,2}[\/-]\d{1,2}[\/-]\d{2,4})|([a-zA-Z]+\s+\d{1,2})/gi);
-                    
+
                     if (locationMatch) {
                         const location = locationMatch[1].trim();
                         let checkIn = null, checkOut = null;
-                        
+
                         if (dateMatch && dateMatch.length >= 2) {
                             checkIn = formatDate(dateMatch[0]);
                             checkOut = formatDate(dateMatch[1]);
                         }
-                        
+
                         searchHotels(location, checkIn, checkOut);
                     } else {
                         createMessage(`🔍 Please specify a location for your hotel search (e.g., "Hotels in Paris" or "Find stays in Tokyo").`, false, [
@@ -637,12 +821,12 @@
                     }
                 } else if (question.toLowerCase().includes('price') || question.toLowerCase().includes('cost')) {
                     const hotelMatch = question.match(/(?:price|cost)\s+(?:of|for)\s+([a-zA-Z\s]+)/i);
-                    
+
                     if (hotelMatch) {
                         const hotelName = hotelMatch[1].trim();
                         const hotel = [...sampleHotelData.popular_destinations, ...sampleHotelData.budget_options]
                             .find(h => h.name.toLowerCase().includes(hotelName.toLowerCase()));
-                            
+
                         if (hotel) {
                             createMessage(`🏨 <strong>${hotel.name}</strong> in ${hotel.location}<br>💰 ${hotel.currency} ${hotel.price} per night<br>⭐ Rating: ${hotel.rating}/5.0`, false, [
                                 { text: 'Save Hotel', icon: '<i class="fas fa-heart"></i>', action: `save_${hotel.name.replace(/\s/g, '_')}` },
@@ -680,6 +864,57 @@
 
         // Initialize the app
         init();
+        // Theme toggle functionality
+        const themeToggle = document.getElementById('themeToggle');
+
+        // Check for saved theme preference or use system preference
+        const currentTheme = localStorage.getItem('theme') ||
+            (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+
+        // Apply the current theme
+        if (currentTheme === 'dark') {
+            document.documentElement.setAttribute('data-theme', 'dark');
+            themeToggle.innerHTML = '<i class="fas fa-sun"></i> Light Mode';
+        } else {
+            document.documentElement.removeAttribute('data-theme');
+            themeToggle.innerHTML = '<i class="fas fa-moon"></i> Dark Mode';
+        }
+
+        // Toggle between dark and light mode
+        themeToggle.addEventListener('click', () => {
+            if (document.documentElement.getAttribute('data-theme') === 'dark') {
+                document.documentElement.removeAttribute('data-theme');
+                localStorage.setItem('theme', 'light');
+                themeToggle.innerHTML = '<i class="fas fa-moon"></i> Dark Mode';
+            } else {
+                document.documentElement.setAttribute('data-theme', 'dark');
+                localStorage.setItem('theme', 'dark');
+                themeToggle.innerHTML = '<i class="fas fa-sun"></i> Light Mode';
+            }
+        });
+
+        function displayMainMenu() {
+            currentCategory = null;
+            currentOffset = 0;
+            createMessage(`🏨 Welcome to your AI Hotel Booking Assistant! How can I help you find your perfect stay?`, false, [
+                { text: 'Search Hotels', icon: '<i class="fas fa-search"></i>', action: 'search_hotels' },
+                { text: 'Popular Destinations', icon: '<i class="fas fa-map-marker-alt"></i>', action: 'popular_destinations' },
+                { text: 'Budget Options', icon: '<i class="fas fa-wallet"></i>', action: 'budget_options' },
+                { text: 'Luxury Hotels', icon: '<i class="fas fa-crown"></i>', action: 'luxury_hotels' },
+                { text: 'Beach Resorts', icon: '<i class="fas fa-umbrella-beach"></i>', action: 'beach_resorts' },
+                { text: 'Hill Stations', icon: '<i class="fas fa-mountain"></i>', action: 'hill_stations' },
+                { text: 'Heritage Stays', icon: '<i class="fas fa-landmark"></i>', action: 'heritage_properties' },
+                { text: 'View Saved Hotels', icon: '<i class="fas fa-heart"></i>', action: 'view_saved' },
+                { text: 'Set Preferences', icon: '<i class="fas fa-cog"></i>', action: 'set_preferences' }
+            ]);
+        }
+
+        // Call the init function to start the app
+        init();
+
+
     </script>
+
 </body>
+
 </html>
