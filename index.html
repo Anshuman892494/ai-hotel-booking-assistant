@@ -7,95 +7,6 @@
     <title>AI Hotel Booking Assistant - Find Best Hotel Deals Worldwide</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        /* Add to :root */
-        [data-theme="dark"] body::before {
-            opacity: 0.08;
-        }
-
-        [data-theme="dark"] .amenity {
-            background: rgba(59, 130, 246, 1);
-        }
-
-        :root {
-            --primary: #2563eb;
-            --secondary: #1e40af;
-            --accent: #3b82f6;
-            --bg: #f8fafc;
-            --text: #1e293b;
-            --card-bg: rgba(255, 255, 255, 0.9);
-            --input-bg: white;
-            --shadow-color: rgba(0, 0, 0, 0.1);
-            --border-color: #e2e8f0;
-            --gradient-start: rgba(37, 99, 235, 0.1);
-            --gradient-end: rgba(30, 64, 175, 0.1);
-        }
-
-        /* Dark mode variables */
-        [data-theme="dark"] {
-            --primary: #3b82f6;
-            --secondary: #60a5fa;
-            --accent: #93c5fd;
-            --bg: #0f172a;
-            --text: #f8fafc;
-            --card-bg: rgba(15, 23, 42, 0.9);
-            --input-bg: #1e293b;
-            --shadow-color: rgba(0, 0, 0, 0.3);
-            --border-color: #334155;
-            --gradient-start: rgba(59, 130, 246, 0.1);
-            --gradient-end: rgba(147, 197, 253, 0.1);
-        }
-
-        /* Add these new styles */
-        .theme-toggle {
-            position: absolute;
-            top: 20px;
-            left: 20px;
-            background: var(--primary);
-            color: white;
-            border: none;
-            padding: 0.5rem 1rem;
-            border-radius: 20px;
-            cursor: pointer;
-            font-size: 0.9rem;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            z-index: 10;
-        }
-
-        /* Update existing styles that use hardcoded colors */
-        body {
-            background: var(--bg);
-            color: var(--text);
-        }
-
-        .header,
-        .chat-container {
-            background: var(--card-bg);
-            box-shadow: 0 4px 6px var(--shadow-color);
-        }
-
-        .message {
-            background: var(--card-bg);
-        }
-
-        input {
-            background: var(--input-bg);
-            border-color: var(--border-color);
-            color: var(--text);
-        }
-
-        .hotel-card {
-            background: var(--card-bg);
-            box-shadow: 0 2px 4px var(--shadow-color);
-        }
-
-        .saved-hotels {
-            background: var(--card-bg);
-            color: var(--primary);
-            border-color: var(--accent);
-        }
-
         :root {
             --primary: #2563eb;
             /* Blue */
@@ -383,14 +294,11 @@
     <div class="saved-hotels" onclick="handleOptionClick('view_saved')">
         <i class="fas fa-heart"></i> Saved Hotels
     </div>
-    <button id="themeToggle" class="theme-toggle">
-        <i class="fas fa-moon"></i> Dark Mode
-    </button>
 
     <div class="container">
         <div class="header">
             <h1>AI Hotel Booking Assistant <i class="fas fa-hotel"></i></h1>
-            <div class="credit">Project by Anshuman Varma <br> Registration No.: 12414950</div>
+            <!-- <div class="credit">Project by Anshuman Varma <br> Registration No.: 12414950</div> -->
             <p>Find the best hotel deals worldwide, compare prices, and book your perfect stay!</p>
         </div>
 
@@ -408,14 +316,39 @@
         </div>
     </div>
 
+
+    <!-- The hotels cover major Indian destinations like:
+
+    Maharashtra (Mumbai, Pune)
+    
+    Rajasthan (Jaipur, Udaipur, Jodhpur)
+    
+    Kerala (Kochi, Kovalam)
+    
+    Tamil Nadu (Chennai, Mahabalipuram)
+    
+    Karnataka (Bengaluru, Coorg)
+    
+    Goa
+    
+    Himachal Pradesh (Shimla)
+    
+    West Bengal (Darjeeling)
+    
+    Uttar Pradesh (Agra, Varanasi)
+    
+    And many more! -->
+
+
+
     <script>
         const chatMessages = document.getElementById('chat-messages');
         const typingIndicator = document.getElementById('typing');
         const userInput = document.getElementById('user-input');
 
         // Amadeus API credentials (Note: In production, these should be handled server-side)
-        const API_KEY = 'YOUR_AMADEUS_API_KEY'; // Replace with your actual API key
-        const API_SECRET = 'YOUR_AMADEUS_API_SECRET'; // Replace with your actual API secret
+        const API_KEY = 'https://test.api.amadeus.com/v1/security/oauth2/token'; // Replace with your actual API key
+        const API_SECRET = 'https://test.api.amadeus.com/v1/security/oauth2/tokenT'; // Replace with your actual API secret
         let accessToken = '';
 
         // Sample hotel data for when API is not available
@@ -492,7 +425,7 @@
                     headers: {
                         'Content-Type': 'application/x-www-form-urlencoded'
                     },
-                    body: `grant_type=client_credentials&client_id=${API_KEY}&client_secret=${API_SECRET}`
+                    body: `grant_type=client_credentials&client_id=${'https://test.api.amadeus.com/v1/security/oauth2/token'}&client_secret=${'https://test.api.amadeus.com/v1/security/oauth2/token'}`
                 });
 
                 const data = await response.json();
