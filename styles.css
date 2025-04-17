@@ -17,7 +17,7 @@
 body {
     background: var(--bg);
     color: #1e293b;
-    min-height: 100vh;
+    min-height: 80%;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -203,7 +203,13 @@ input::placeholder {
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     border-left: 4px solid var(--accent);
 }
-
+.hotel-card img.hotel-image {
+    width: 400px;
+    height: 200px;
+    object-fit: cover;
+    border-radius: 8px;
+    margin-bottom: 10px;
+}
 .hotel-card h3 {
     color: var(--primary);
     margin-bottom: 0.5rem;
