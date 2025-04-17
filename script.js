@@ -6,12 +6,43 @@ const userInput = document.getElementById('user-input');
 // API Configuration
 const API_KEY = 'Wbr6At0qIjMAdFmZoAzEerfS9BGdA6YQ';
 const API_SECRET = 'eBPNFeLGQL3OdU0O';
-let accessToken = 'https://test.api.amadeus.com/v1/security/oauth2/tokenT';
+let accessToken = 'ZovY1Abuulvjbss6hFVZFiwG8rQx';
 
 // Sample hotel data
 const sampleHotelData = {
     popular_destinations: [
         // Luxury hotels
+        { name: "Taj Bekal Resort & Spa", location: "Kasaragod, Kerala", price: 22000, currency: "INR", rating: 4.8, amenities: ["Backwaters", "Luxury", "Private Pool Villas", "Ayurvedic Spa"], image: "https://images.unsplash.com/photo-1582719471386-5d6891411a1a" },
+        { name: "Hyatt Regency Amritsar", location: "Amritsar, Punjab", price: 16000, currency: "INR", rating: 4.7, amenities: ["Golden Temple View", "Luxury", "Spa", "Rooftop Dining"], image: "https://images.unsplash.com/photo-1584132967334-10e028bd69f7" },
+        { name: "Taj Corbett Resort & Spa", location: "Jim Corbett, Uttarakhand", price: 19000, currency: "INR", rating: 4.6, amenities: ["Jungle Safari", "Luxury", "Spa", "Private Cottages"], image: "https://images.unsplash.com/photo-1582719471386-5d6891411a1a" },
+        { name: "Radisson Blu Guwahati", location: "Guwahati, Assam", price: 12000, currency: "INR", rating: 4.5, amenities: ["Luxury", "River View", "Spa", "Rooftop Pool"], image: "https://images.unsplash.com/photo-1566073771259-6a8506099945" },
+        { name: "Grand Hyatt Goa", location: "Goa", price: 20000, currency: "INR", rating: 4.8, amenities: ["Beachfront", "Luxury", "Private Beach", "Infinity Pool"], image: "https://images.unsplash.com/photo-1566073771259-6a8506099945" },
+        // Additional hotels...
+        { name: "The Oberoi Udaivilas", location: "Udaipur, Rajasthan", price: 55000, currency: "INR", rating: 5.0, amenities: ["Lake View", "Luxury", "Spa", "Private Boat Ride"], image: "https://images.unsplash.com/photo-1584121233205-35c89b9845a7" },
+        { name: "Alila Diwa Goa", location: "Majorda, Goa", price: 27000, currency: "INR", rating: 4.7, amenities: ["Luxury", "Beach Access", "Yoga", "Infinity Pool"], image: "https://images.unsplash.com/photo-1581313902468-cd306cfdfed4" },
+        { name: "Leela Palace", location: "New Delhi", price: 50000, currency: "INR", rating: 4.9, amenities: ["Luxury", "Spa", "Rooftop Pool", "Fine Dining"], image: "https://images.unsplash.com/photo-1581313902468-cd306cfdfed4" },
+        { name: "The Taj Mahal Hotel", location: "New Delhi", price: 43000, currency: "INR", rating: 4.8, amenities: ["Luxury", "Rooftop Bar", "Spa", "Fine Dining"], image: "https://images.unsplash.com/photo-1582719471386-5d6891411a1a" },
+        { name: "The St. Regis", location: "Mumbai, Maharashtra", price: 50000, currency: "INR", rating: 4.9, amenities: ["Luxury", "Seafront", "Spa", "Fine Dining"], image: "https://images.unsplash.com/photo-1583417319070-4a69db38a482" },
+        { name: "The Westin", location: "Kolkata, West Bengal", price: 17000, currency: "INR", rating: 4.6, amenities: ["Luxury", "Spa", "Pool", "Fitness Center"], image: "https://images.unsplash.com/photo-1584132967334-10e028bd69f7" },
+        // Additional Hotels...
+        { name: "Treebo Trend", location: "Mumbai, Maharashtra", price: 2500, currency: "INR", rating: 3.9, amenities: ["Budget", "Clean Rooms", "Free WiFi", "Breakfast"], image: "https://images.unsplash.com/photo-1520250497591-112f2f40a3f4" },
+        { name: "OYO Townhouse", location: "Bengaluru, Karnataka", price: 1800, currency: "INR", rating: 3.7, amenities: ["Budget", "Smart Rooms", "Café", "Free WiFi"], image: "https://images.unsplash.com/photo-1566073771259-6a8506099945" },
+        { name: "FabHotel", location: "Delhi", price: 2200, currency: "INR", rating: 3.8, amenities: ["Budget", "Complimentary Breakfast", "Free WiFi"], image: "https://images.unsplash.com/photo-1582719471386-5d6891411a1a" },
+        { name: "Hotel Supreme", location: "Jaipur, Rajasthan", price: 1500, currency: "INR", rating: 3.5, amenities: ["Budget", "City Center", "Basic Amenities"], image: "https://images.unsplash.com/photo-1584132967334-10e028bd69f7" },
+        { name: "Hotel Sapphire", location: "Goa", price: 2000, currency: "INR", rating: 3.6, amenities: ["Budget", "Near Beach", "AC Rooms"], image: "https://images.unsplash.com/photo-1566438480900-0609be27a4be" },
+        // Additional hotels...
+        { name: "Hotel Empire", location: "Bengaluru, Karnataka", price: 1800, currency: "INR", rating: 3.6, amenities: ["Basic", "Clean Rooms", "Free WiFi"], image: "https://images.unsplash.com/photo-1582719471386-5d6891411a1a" },
+        { name: "Hotel Rainbow", location: "Chennai, Tamil Nadu", price: 2000, currency: "INR", rating: 3.7, amenities: ["Budget", "Near Station", "Restaurant"], image: "https://images.unsplash.com/photo-1583417319070-4a69db38a482" },
+        { name: "OYO Rooms", location: "Kochi, Kerala", price: 1600, currency: "INR", rating: 3.5, amenities: ["Budget", "Basic Amenities", "Free WiFi"], image: "https://images.unsplash.com/photo-1566073771259-6a8506099945" },
+        { name: "Hotel River View", location: "Varanasi, Uttar Pradesh", price: 1300, currency: "INR", rating: 3.4, amenities: ["Budget", "Ghat View", "Complimentary Breakfast"], image: "https://images.unsplash.com/photo-1582719471386-5d6891411a1a" },
+        { name: "Hotel City Inn", location: "Jaipur, Rajasthan", price: 1800, currency: "INR", rating: 3.8, amenities: ["Budget", "Free WiFi", "City Center"], image: "https://images.unsplash.com/photo-1581313902468-cd306cfdfed4" },
+        { name: "Hotel Lotus", location: "Kochi, Kerala", price: 1500, currency: "INR", rating: 3.6, amenities: ["Basic", "Free WiFi", "AC Rooms"], image: "https://images.unsplash.com/photo-1583417319070-4a69db38a482" },
+        // Additional Hotels...
+        { name: "Taj Bekal Resort & Spa", location: "Kasaragod, Kerala", price: 22000, currency: "INR", rating: 4.8, amenities: ["Backwaters", "Luxury", "Private Pool Villas", "Ayurvedic Spa"], image: "https://images.unsplash.com/photo-1582719471386-5d6891411a1a" },
+        { name: "Hyatt Regency Amritsar", location: "Amritsar, Punjab", price: 16000, currency: "INR", rating: 4.7, amenities: ["Golden Temple View", "Luxury", "Spa", "Rooftop Dining"], image: "https://images.unsplash.com/photo-1584132967334-10e028bd69f7" },
+        { name: "Taj Corbett Resort & Spa", location: "Jim Corbett, Uttarakhand", price: 19000, currency: "INR", rating: 4.6, amenities: ["Jungle Safari", "Luxury", "Spa", "Private Cottages"], image: "https://images.unsplash.com/photo-1582719471386-5d6891411a1a" },
+        { name: "Radisson Blu Guwahati", location: "Guwahati, Assam", price: 12000, currency: "INR", rating: 4.5, amenities: ["Luxury", "River View", "Spa", "Rooftop Pool"], image: "https://images.unsplash.com/photo-1566073771259-6a8506099945" },
+        { name: "Grand Hyatt Goa", location: "Goa", price: 20000, currency: "INR", rating: 4.8, amenities: ["Beachfront", "Luxury", "Private Beach", "Infinity Pool"], image: "https://images.unsplash.com/photo-1566073771259-6a8506099945" },
         { name: "Taj Mahal Palace", location: "Mumbai, Maharashtra", price: 25000, currency: "INR", rating: 4.9, amenities: ["Luxury", "Sea View", "Heritage", "Spa", "Fine Dining"], image: "https://images.unsplash.com/photo-1583417319070-4a69db38a482" },
         { name: "The Oberoi Amarvilas", location: "Agra, Uttar Pradesh", price: 45000, currency: "INR", rating: 4.9, amenities: ["Taj Mahal View", "Luxury", "Private Pool", "Butler Service"], image: "https://images.unsplash.com/photo-1566438480900-0609be27a4be" },
         { name: "Taj Falaknuma Palace", location: "Hyderabad, Telangana", price: 38000, currency: "INR", rating: 4.8, amenities: ["Palace Hotel", "Luxury", "Historic", "Horse Carriage Rides"], image: "https://images.unsplash.com/photo-1582719471386-5d6891411a1a" },
@@ -47,6 +78,15 @@ const sampleHotelData = {
         { name: "Fortune Park", location: "Bhopal, Madhya Pradesh", price: 4000, currency: "INR", rating: 4.0, amenities: ["Business Hotel", "Conference Facilities", "Restaurant"], image: "https://images.unsplash.com/photo-1583417319070-4a69db38a482" }
     ],
     beach_resorts: [
+        { name: "Taj Exotica Resort & Spa", location: "Goa", price: 18000, currency: "INR", rating: 4.7, amenities: ["Beachfront", "Luxury", "Spa", "Water Sports"], image: "https://images.unsplash.com/photo-1566073771259-6a8506099945" },
+        { name: "The Leela Kovalam", location: "Kovalam, Kerala", price: 15000, currency: "INR", rating: 4.6, amenities: ["Cliff-top Location", "Ayurveda Spa", "Private Beach"], image: "https://images.unsplash.com/photo-1582719471386-5d6891411a1a" },
+        { name: "Taj Fisherman's Cove", location: "Chennai, Tamil Nadu", price: 12000, currency: "INR", rating: 4.5, amenities: ["Beach Resort", "Spa", "Water Sports"], image: "https://images.unsplash.com/photo-1584132967334-10e028bd69f7" },
+        { name: "Radisson Blu Resort", location: "Goa", price: 16000, currency: "INR", rating: 4.5, amenities: ["Beachfront", "Luxury", "Restaurant", "Spa"], image: "https://images.unsplash.com/photo-1581313902468-cd306cfdfed4" },
+        { name: "Marriott Resort", location: "Kochi, Kerala", price: 17000, currency: "INR", rating: 4.8, amenities: ["Beach Access", "Infinity Pool", "Spa"], image: "https://images.unsplash.com/photo-1584121233205-35c89b9845a7" },
+        // Additional hotels...
+        { name: "Leela Goa", location: "Majorda, Goa", price: 25000, currency: "INR", rating: 5.0, amenities: ["Beachfront", "Luxury", "Water Sports"], image: "https://images.unsplash.com/photo-1581313902468-cd306cfdfed4" },
+        { name: "Holiday Inn", location: "Bengaluru, Karnataka", price: 20000, currency: "INR", rating: 4.7, amenities: ["Beach View", "Luxury", "Pool"], image: "https://images.unsplash.com/photo-1583417319070-4a69db38a482" },
+        // Additional Hotels...
         { name: "Taj Exotica Resort & Spa", location: "Goa", price: 18000, currency: "INR", rating: 4.7, amenities: ["Beachfront", "Luxury", "Spa", "Water Sports"], image: "https://images.unsplash.com/photo-1566073771259-6a8506099945" },
         { name: "The Leela Kovalam", location: "Kovalam, Kerala", price: 15000, currency: "INR", rating: 4.6, amenities: ["Cliff-top Location", "Ayurveda Spa", "Private Beach"], image: "https://images.unsplash.com/photo-1582719471386-5d6891411a1a" },
         { name: "Taj Fisherman's Cove", location: "Chennai, Tamil Nadu", price: 12000, currency: "INR", rating: 4.5, amenities: ["Beach Resort", "Spa", "Water Sports"], image: "https://images.unsplash.com/photo-1584132967334-10e028bd69f7" }
@@ -133,18 +173,12 @@ function displayMainMenu() {
     currentCategory = null;
     currentOffset = 0;
     createMessage(`🏨 Welcome to your AI Hotel Booking Assistant! How can I help you find your perfect stay?`, false, [
-        { text: 'Search Hotels', icon: '<i class="fas fa-search"></i>', action: 'search_hotels' },
-        { text: 'Popular Destinations', icon: '<i class="fas fa-map-marker-alt"></i>', action: 'popular_destinations' },
-        { text: 'Budget Options', icon: '<i class="fas fa-wallet"></i>', action: 'budget_options' },
-        { text: 'Luxury Hotels', icon: '<i class="fas fa-crown"></i>', action: 'luxury_hotels' },
         { text: 'Beach Resorts', icon: '<i class="fas fa-umbrella-beach"></i>', action: 'beach_resorts' },
         { text: 'Hill Stations', icon: '<i class="fas fa-mountain"></i>', action: 'hill_stations' },
         { text: 'Heritage Stays', icon: '<i class="fas fa-landmark"></i>', action: 'heritage_properties' },
-        { text: 'View Saved Hotels', icon: '<i class="fas fa-heart"></i>', action: 'view_saved' },
         { text: 'Set Preferences', icon: '<i class="fas fa-cog"></i>', action: 'set_preferences' }
     ]);
 }
-
 // Hotel Search Functions
 async function searchHotels(location, checkIn = null, checkOut = null) {
     showTyping();
@@ -153,35 +187,69 @@ async function searchHotels(location, checkIn = null, checkOut = null) {
         let hotels = [];
 
         if (accessToken) {
-            // Use Amadeus API if available
-            let url = `https://test.api.amadeus.com/v2/shopping/hotel-offers?cityCode=${location}`;
+            try {
+                // First try to get IATA city code if location is a city name
+                let cityCode = location;
 
-            if (checkIn && checkOut) {
-                url += `&checkInDate=${checkIn}&checkOutDate=${checkOut}`;
-            }
+                // If location is not a 3-letter IATA code, try to find the code
+                if (location.length !== 3 || !/^[A-Z]{3}$/i.test(location)) {
+                    const cityResponse = await fetch(`https://test.api.amadeus.com/v1/reference-data/locations/cities?keyword=${encodeURIComponent(location)}`, {
+                        headers: {
+                            'Authorization': `Bearer ${accessToken}`
+                        }
+                    });
 
-            const response = await fetch(url, {
-                headers: {
-                    'Authorization': `Bearer ${accessToken}`
+                    if (cityResponse.ok) {
+                        const cityData = await cityResponse.json();
+                        if (cityData.data && cityData.data.length > 0) {
+                            cityCode = cityData.data[0].iataCode;
+                        }
+                    }
                 }
-            });
 
-            const data = await response.json();
+                // Use Amadeus API v2 which has better hotel search capabilities
+                let url = `https://test.api.amadeus.com/v2/shopping/hotel-offers?cityCode=${cityCode}`;
 
-            if (data.data && data.data.length > 0) {
-                hotels = data.data.map(hotel => ({
-                    name: hotel.hotel.name,
-                    location: `${hotel.hotel.address.cityName}, ${hotel.hotel.address.countryCode}`,
-                    price: hotel.offers[0].price.total,
-                    currency: hotel.offers[0].price.currency,
-                    rating: (Math.random() * 2 + 3).toFixed(1),
-                    amenities: hotel.hotel.amenities || ["Free WiFi", "24h Reception"]
-                }));
+                // Add additional parameters
+                if (checkIn && checkOut) {
+                    url += `&checkInDate=${checkIn}&checkOutDate=${checkOut}`;
+                }
+
+                // Add currency and ratings filters
+                url += '&currency=INR&ratings=1,2,3,4,5&radius=50&radiusUnit=KM';
+
+                const response = await fetch(url, {
+                    headers: {
+                        'Authorization': `Bearer ${accessToken}`
+                    }
+                });
+
+                if (!response.ok) {
+                    throw new Error(`API request failed with status ${response.status}`);
+                }
+
+                const data = await response.json();
+
+                if (data.data && data.data.length > 0) {
+                    hotels = data.data.map(hotel => ({
+                        name: hotel.hotel.name || 'Unknown Hotel',
+                        location: `${hotel.hotel.address.cityName || location}, ${hotel.hotel.address.countryCode || 'India'}`,
+                        price: hotel.offers[0]?.price?.total || 'Price not available',
+                        currency: hotel.offers[0]?.price?.currency || 'INR',
+                        rating: hotel.hotel.rating || (Math.random() * 2 + 3).toFixed(1),
+                        amenities: hotel.hotel.amenities || ["Free WiFi", "24h Reception"],
+                        image: hotel.hotel.media?.[0]?.uri || 'https://via.placeholder.com/300'
+                    }));
+                }
+            } catch (apiError) {
+                console.error("Amadeus API error:", apiError);
+                // Continue to fallback data
             }
         }
 
         // Fallback to sample data if API fails or returns no results
         if (hotels.length === 0) {
+            console.log("Using sample data as fallback");
             // Combine all hotel categories
             hotels = [
                 ...sampleHotelData.popular_destinations,
@@ -211,14 +279,15 @@ async function searchHotels(location, checkIn = null, checkOut = null) {
 
         // Display hotel results
         const hotelsList = hotels.slice(0, 5).map(hotel => `
-            <div class="hotel-card">
-                <h3>${hotel.name}</h3>
+            <div class="hotel-card"><img src="${hotel.image}" alt="${hotel.name}" class="hotel-image" style="width:400px;height:200px;object-fit:cover;border-radius:8px;margin-bottom:10px;">
+        <h3>${hotel.name}</h3>
                 <p>📍 ${hotel.location}</p>
                 <p class="price">${hotel.currency} ${hotel.price}</p>
                 <p class="rating">⭐ ${hotel.rating}/5.0</p>
-                <p>${hotel.amenities.map(a => `<span class="amenity">${a}</span>`).join(' ')}</p>
+                <div class="amenities">${hotel.amenities.map(a => `<span class="amenity">${a}</span>`).join(' ')}</div>
             </div>
         `).join('');
+
 
         createMessage(`🏨 Hotels in ${location}:<br>${hotelsList}`, false, [
             { text: 'View More', icon: '<i class="fas fa-arrow-down"></i>', action: 'view_more', data: { location, hotels } },
@@ -227,13 +296,12 @@ async function searchHotels(location, checkIn = null, checkOut = null) {
         ]);
 
     } catch (error) {
-        console.error("Error searching hotels:", error);
+        console.error("Error in searchHotels:", error);
         hideTyping();
         createMessage(`⚠️ Sorry, we encountered an error. Here are some sample hotels:`, false);
         displaySampleHotels();
     }
 }
-
 function displaySampleHotels() {
     const hotels = sampleHotelData.popular_destinations.slice(0, 3);
     const hotelsList = hotels.map(hotel => `
