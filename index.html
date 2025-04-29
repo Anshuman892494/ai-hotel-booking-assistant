@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI Hotel Booking Assistant - Find Best Hotel Deals Worldwide</title>
+    <title>AI Hotel Booking Assistant - Find & Book Hotels</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="styles.css">
 </head>
@@ -15,20 +15,33 @@
     <div class="container">
         <div class="header">
             <h1>AI Hotel Booking Assistant <i class="fas fa-hotel"></i></h1>
-            <p>Find the best hotel deals worldwide, compare prices, and book your perfect stay!</p>
+            <p>Find and book the best hotels with voice search and instant confirmation!</p>
         </div>
 
         <div class="chat-container">
             <div class="chat-messages" id="chat-messages"></div>
             <div class="typing-indicator" id="typing">
-                <i class="fas fa-circle-notch fa-spin"></i> Searching for hotel deals...
+                <i class="fas fa-circle-notch fa-spin"></i> Searching for hotels...
             </div>
             <div class="input-container">
-                <input type="text" id="user-input" placeholder="Ask about hotels (e.g., 'Hotels in Goa for June')...">
+                <input type="text" id="user-input" placeholder="Ask about hotels (e.g., 'Book hotel in Delhi for 2 people')...">
                 <button class="option-btn" onclick="sendMessage()">
                     <i class="fas fa-paper-plane"></i> Send
                 </button>
             </div>
+        </div>
+    </div>
+
+    <button id="voice-btn" class="voice-btn">
+        <i class="fas fa-microphone"></i>
+    </button>
+
+    <!-- Booking Modal -->
+    <div id="booking-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeModal()">&times;</span>
+            <h2 id="modal-title">Complete Your Booking</h2>
+            <div id="modal-body"></div>
         </div>
     </div>
 
