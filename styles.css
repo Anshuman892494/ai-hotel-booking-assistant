@@ -1,8 +1,11 @@
 :root {
-    --primary: #2563eb; /* Blue */
-    --secondary: #1e40af; /* Darker Blue */
-    --accent: #3b82f6; /* Lighter Blue */
+    --primary: #2563eb;
+    --secondary: #1e40af;
+    --accent: #3b82f6;
     --bg: #f8fafc;
+    --success: #10b981;
+    --warning: #f59e0b;
+    --error: #ef4444;
     --gradient-start: rgba(37, 99, 235, 0.1);
     --gradient-end: rgba(30, 64, 175, 0.1);
 }
@@ -17,7 +20,7 @@
 body {
     background: var(--bg);
     color: #1e293b;
-    min-height: 80%;
+    min-height: 100vh;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -62,10 +65,9 @@ body::before {
     color: var(--primary);
 }
 
-.header .credit {
-    font-size: 0.9rem;
+.header p {
     color: #64748b;
-    margin-bottom: 0.5rem;
+    font-size: 1.1rem;
 }
 
 .chat-container {
@@ -203,13 +205,15 @@ input::placeholder {
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     border-left: 4px solid var(--accent);
 }
+
 .hotel-card img.hotel-image {
-    width: 400px;
+    width: 100%;
     height: 200px;
     object-fit: cover;
     border-radius: 8px;
     margin-bottom: 10px;
 }
+
 .hotel-card h3 {
     color: var(--primary);
     margin-bottom: 0.5rem;
@@ -217,27 +221,128 @@ input::placeholder {
 
 .hotel-card .price {
     font-weight: bold;
-    color: #10b981;
+    color: var(--success);
     margin: 0.5rem 0;
 }
 
 .hotel-card .rating {
-    color: #f59e0b;
+    color: var(--warning);
     font-weight: bold;
 }
 
-.date-picker {
-    display: flex;
-    gap: 1rem;
-    margin: 1rem 0;
+.book-btn {
+    background: var(--success);
+    color: white;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 8px;
+    cursor: pointer;
+    margin-top: 0.5rem;
+    transition: all 0.3s ease;
 }
 
-.date-picker input {
+.book-btn:hover {
+    background: #0d9c6d;
+}
+
+/* Voice Button */
+.voice-btn {
+    position: fixed;
+    bottom: 20px;
+    left: 20px;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background: var(--primary);
+    color: white;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    transition: all 0.3s ease;
+    z-index: 100;
+}
+
+.voice-btn:hover {
+    transform: scale(1.1);
+    background: var(--secondary);
+}
+
+.voice-btn.listening {
+    animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+    0% { box-shadow: 0 0 0 0 rgba(37, 99, 235, 0.7); }
+    70% { box-shadow: 0 0 0 15px rgba(37, 99, 235, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(37, 99, 235, 0); }
+}
+
+/* Modal Styles */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+.modal-content {
+    background-color: white;
+    margin: 10% auto;
+    padding: 2rem;
+    border-radius: 15px;
+    width: 90%;
+    max-width: 500px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+    animation: slideDown 0.3s ease;
+}
+
+.close-btn {
+    color: #aaa;
+    float: right;
+    font-size: 1.5rem;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.close-btn:hover {
+    color: var(--error);
+}
+
+.booking-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.booking-form label {
+    font-weight: 500;
+    margin-bottom: 0.3rem;
+}
+
+.booking-form input, .booking-form select {
     padding: 0.8rem;
     border: 1px solid #e2e8f0;
     border-radius: 8px;
+    font-size: 1rem;
 }
 
+.confirmation-message {
+    text-align: center;
+    padding: 1rem;
+}
+
+.confirmation-message i {
+    font-size: 3rem;
+    color: var(--success);
+    margin-bottom: 1rem;
+}
+
+/* Animations */
 @keyframes popIn {
     from {
         transform: scale(0.9);
@@ -274,5 +379,9 @@ input::placeholder {
         position: static;
         margin: 0.5rem auto;
         width: fit-content;
+    }
+    .modal-content {
+        margin: 20% auto;
+        width: 95%;
     }
 }
