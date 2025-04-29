@@ -1,74 +1,94 @@
-# ai-hotel-booking-assistant
-# 🏨 AI Hotel Booking Assistant 🌍
+AI Hotel Booking Assistant
+Project Screenshot
 
+Overview
+The AI Hotel Booking Assistant is a web-based application that helps users find and book hotels across India with voice-enabled search capabilities. This interactive assistant provides a conversational interface to search for hotels, view details, and complete bookings.
 
+Features
+✅ Voice Search Integration - Speak your hotel queries using the microphone button
+✅ North India Focus - Extensive database of hotels across Punjab, Haryana, Delhi, Rajasthan, and more
+✅ Interactive Booking System - Complete booking flow with date selection and guest count
+✅ Visual Hotel Cards - Attractive displays with images, ratings, and amenities
+✅ Saved Hotels - Bookmark your favorite hotels for quick access
+✅ Responsive Design - Works on desktop and mobile devices
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
+Technologies Used
+Frontend: HTML5, CSS3, JavaScript
 
-[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](http://makeapullrequest.com)
+APIs: Web Speech API (for voice recognition), RapidAPI (for hotel data)
 
-![GitHub stars](https://img.shields.io/github/stars/yourusername/ai-hotel-booking-assistant?style=social)
+UI Libraries: Font Awesome (for icons)
 
+Design: Modern gradient background with hotel-themed imagery
 
+Installation
+No installation required! Simply open the index.html file in any modern web browser.
 
-An intelligent chatbot that helps users find the best hotel deals worldwide, compare prices, and book their perfect stay!
+For development:
 
+Clone this repository
 
+Open the project folder
 
-## ✨ Features
+Launch index.html in your browser
 
+How to Use
+Search Hotels:
 
+Type or speak your destination (e.g., "Hotels in Amritsar")
 
-- 🔍 *Smart Hotel Search* - Find hotels by location, price range, or amenities
+Specify dates and number of guests if needed
 
-- 💰 *Price Comparison* - View competitive rates across different booking platforms
+View Results:
 
-- 💖 *Save Favorites* - Keep track of hotels you love
+Browse hotel cards with images and details
 
-- ⚙ *Personalized Recommendations* - Get suggestions based on your preferences
+Click "Book Now" on any hotel
 
-- 📅 *Date-based Search* - Find availability for specific travel dates
+Complete Booking:
 
-- 🌐 *Global Coverage* - Hotels from around the world
+Select check-in/check-out dates
 
+Choose number of guests
 
+Confirm booking to receive confirmation
 
-## 🛠 Technologies Used
+Voice Commands:
 
+Click the microphone button
 
+Speak naturally (e.g., "Find luxury hotels in Jaipur")
 
-![HTML5](https://img.shields.io/badge/HTML5-E34F26?style=for-the-badge&logo=html5&logoColor=white)
+Sample Hotel Locations
+The assistant includes premium hotels across North India:
 
-![CSS3](https://img.shields.io/badge/CSS3-1572B6?style=for-the-badge&logo=css3&logoColor=white)
+Punjab: Amritsar, Chandigarh, Ludhiana
 
-![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black)
+Haryana: Gurgaon, Faridabad
 
-![Amadeus API](https://img.shields.io/badge/Amadeus_API-00A0DE?style=for-the-badge&logo=amadeus&logoColor=white)
+Delhi: Multiple locations
 
-![Font Awesome](https://img.shields.io/badge/Font_Awesome-528DD7?style=for-the-badge&logo=font-awesome&logoColor=white)
+Rajasthan: Jaipur, Udaipur, Jodhpur
 
+Uttar Pradesh: Agra, Lucknow, Varanasi
 
+Hill Stations: Shimla, Manali, Nainital
 
-## 🚀 Getting Started
+Future Enhancements
+User accounts and login system
 
+Payment gateway integration
 
+Hotel reviews and ratings
 
-### Prerequisites
+Advanced filters (price range, star rating)
 
+Map view of hotel locations
 
+License
+This project is open-source and available under the MIT License.
 
-- Web browser (Chrome, Firefox, Safari, Edge)
+Contact
+For questions or feedback, please open an issue in this repository.
 
-- (Optional) Amadeus API key for live hotel data
-
-
-
-### Installation
-
-
-
-1. Clone the repository
-
-```bash
-
-git clone https://github.com/Anshuman892494/ai-hotel-booking-assistant
+Happy Hotel Hunting! 🏨✈️
