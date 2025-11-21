@@ -1,94 +1,186 @@
-AI Hotel Booking Assistant
-Project Screenshot
+# 🏨 AI Hotel Booking Assistant
 
-Overview
-The AI Hotel Booking Assistant is a web-based application that helps users find and book hotels across India with voice-enabled search capabilities. This interactive assistant provides a conversational interface to search for hotels, view details, and complete bookings.
+A fully client-side, voice-enabled hotel discovery and booking assistant built using HTML, CSS, and JavaScript. This project provides a conversational interface, modern UI components, and an interactive booking workflow designed for a smooth and intuitive user experience.
 
-Features
-✅ Voice Search Integration - Speak your hotel queries using the microphone button
-✅ North India Focus - Extensive database of hotels across Punjab, Haryana, Delhi, Rajasthan, and more
-✅ Interactive Booking System - Complete booking flow with date selection and guest count
-✅ Visual Hotel Cards - Attractive displays with images, ratings, and amenities
-✅ Saved Hotels - Bookmark your favorite hotels for quick access
-✅ Responsive Design - Works on desktop and mobile devices
+---
 
-Technologies Used
-Frontend: HTML5, CSS3, JavaScript
+## ✨ Key Features
 
-APIs: Web Speech API (for voice recognition), RapidAPI (for hotel data)
+* **Voice Search Integration** – Search hotels hands-free using the Web Speech API.
+* **North India Hotel Coverage** – Includes sample hotel data across Punjab, Haryana, Delhi, Rajasthan, Uttar Pradesh, and major hill stations.
+* **Complete Booking Flow** – Select check-in/check-out dates, number of guests, and confirm booking.
+* **Modern Hotel Cards** – Clean visual cards with images, amenities, pricing, and ratings.
+* **Saved Hotels** – Bookmark favorite hotels using LocalStorage.
+* **Responsive Layout** – Fully optimized for desktop and mobile screens.
+* **100% Frontend Application** – No backend required.
 
-UI Libraries: Font Awesome (for icons)
+---
 
-Design: Modern gradient background with hotel-themed imagery
+## 🧭 Technologies Used
 
-Installation
-No installation required! Simply open the index.html file in any modern web browser.
+* **HTML5**
+* **CSS3** (Modern gradient backgrounds and card UI)
+* **JavaScript (Vanilla)**
+* **Web Speech API** for voice search
+* **RapidAPI** (optional) for hotel data
+* **Font Awesome** for icons
 
-For development:
+---
 
-Clone this repository
+## 📸 Screenshot / Demo
 
-Open the project folder
+*Add your project screenshot or hosted demo link here.*
 
-Launch index.html in your browser
+```
+[ Insert Screenshot or Live Demo URL ]
+```
 
-How to Use
-Search Hotels:
+---
 
-Type or speak your destination (e.g., "Hotels in Amritsar")
+## 🚀 Installation & Setup
 
-Specify dates and number of guests if needed
+### No installation required
 
-View Results:
+Simply open **index.html** in any modern browser.
 
-Browse hotel cards with images and details
+### For development or API integration
 
-Click "Book Now" on any hotel
+```bash
+git clone https://github.com/your-username/ai-hotel-assistant.git
+cd ai-hotel-assistant
+```
 
-Complete Booking:
+Run on a local server (recommended):
 
-Select check-in/check-out dates
+```bash
+# Python
+python -m http.server 8000
 
-Choose number of guests
+# or Node.js
+yarn global add http-server
+http-server
+```
 
-Confirm booking to receive confirmation
+Open in your browser:
 
-Voice Commands:
+```
+http://localhost:8000
+```
 
-Click the microphone button
+---
 
-Speak naturally (e.g., "Find luxury hotels in Jaipur")
+## 🧭 How to Use
 
-Sample Hotel Locations
-The assistant includes premium hotels across North India:
+### 1. Search for Hotels
 
-Punjab: Amritsar, Chandigarh, Ludhiana
+* Type a destination in the search bar, **or**
+* Click the microphone icon and speak your query (e.g., “Hotels in Amritsar”).
 
-Haryana: Gurgaon, Faridabad
+### 2. Browse Results
 
-Delhi: Multiple locations
+* Scroll through hotel cards including pricing, amenities, ratings, and images.
+* Click **Book Now** on any hotel.
 
-Rajasthan: Jaipur, Udaipur, Jodhpur
+### 3. Complete Booking
 
-Uttar Pradesh: Agra, Lucknow, Varanasi
+* Choose check-in/check-out dates.
+* Select number of guests.
+* Confirm to complete the booking.
 
-Hill Stations: Shimla, Manali, Nainital
+### 4. Save Favorites
 
-Future Enhancements
-User accounts and login system
+* Click the **bookmark icon** to save hotels locally.
 
-Payment gateway integration
+---
 
-Hotel reviews and ratings
+## 🌍 Supported Locations (Sample Data)
 
-Advanced filters (price range, star rating)
+* **Punjab:** Amritsar, Chandigarh, Ludhiana
+* **Haryana:** Gurgaon, Faridabad
+* **Delhi:** Multiple regions
+* **Rajasthan:** Jaipur, Udaipur, Jodhpur
+* **Uttar Pradesh:** Agra, Lucknow, Varanasi
+* **Hill Stations:** Shimla, Manali, Nainital
 
-Map view of hotel locations
+---
 
-License
-This project is open-source and available under the MIT License.
+## 🔮 Future Enhancements
 
-Contact
-For questions or feedback, please open an issue in this repository.
+* User authentication & dashboards
+* Payment gateway integration
+* Reviews & rating system
+* Advanced filters (price, star rating)
+* Interactive map view (Google Maps / Mapbox)
+* Multi-language support
+* PWA support & offline caching
 
-Happy Hotel Hunting! 🏨✈️
+---
+
+## 📁 Project Structure
+
+```
+ai-hotel-assistant/
+├── index.html
+├── styles.css
+├── app.js
+├── assets/
+│   ├── images/
+│   └── icons/
+├── data/
+│   └── hotels.json
+└── README.md
+```
+
+---
+
+## 🎤 Voice Recognition Example
+
+```js
+const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+recognition.lang = 'en-IN';
+recognition.interimResults = false;
+
+micButton.addEventListener('click', () => recognition.start());
+
+recognition.onresult = event => {
+  const text = event.results[0][0].transcript;
+  searchInput.value = text;
+  performSearch(text);
+};
+```
+
+---
+
+## 📦 Data Source Options
+
+* **Local JSON** for mock/hardcoded hotels
+* **RapidAPI** or similar for real-time listings
+
+---
+
+## 🤝 Contributing
+
+Contributions are welcome!
+
+1. Fork the repository
+2. Create a feature branch
+3. Commit changes
+4. Open a Pull Request
+
+---
+
+## 🛡 License
+
+This project is available under the **MIT License**.
+
+---
+
+## 📫 Contact
+
+For inquiries or issues, open an issue in the repository or contact the maintainer via GitHub.
+
+---
+
+## 🏨 Happy Hotel Hunting!
+
+A clean, smart, voice-enabled way to explore hotels across India.
