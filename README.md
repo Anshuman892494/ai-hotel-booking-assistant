@@ -27,48 +27,6 @@ A fully client-side, voice-enabled hotel discovery and booking assistant built u
 
 ---
 
-## 📸 Screenshot / Demo
-
-*Add your project screenshot or hosted demo link here.*
-
-```
-[ Insert Screenshot or Live Demo URL ]
-```
-
----
-
-## 🚀 Installation & Setup
-
-### No installation required
-
-Simply open **index.html** in any modern browser.
-
-### For development or API integration
-
-```bash
-git clone https://github.com/your-username/ai-hotel-assistant.git
-cd ai-hotel-assistant
-```
-
-Run on a local server (recommended):
-
-```bash
-# Python
-python -m http.server 8000
-
-# or Node.js
-yarn global add http-server
-http-server
-```
-
-Open in your browser:
-
-```
-http://localhost:8000
-```
-
----
-
 ## 🧭 How to Use
 
 ### 1. Search for Hotels
